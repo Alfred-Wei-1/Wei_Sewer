@@ -1,0 +1,35 @@
+#PCSWMM project file
+#Please do not edit
+[General]
+PCSWMM.NET Version=7.6.3620
+SWMM5 Version=5.1.015
+Version=3
+Package Path=C:\Users\chuan\OneDrive\Smart Sewer\Matlab Code\SWMM File\interceptor\interceptor.pcz
+Last Report Date=04/25/2024 4:41:27 PM
+[2D]
+2DModeling=False
+[Project Summary]
+Compute Time= < 1 sec
+Routing Error=-0.042
+Runoff Error=-0.066
+Run Incomplete=False
+[Authors]
+Author0=Margaret Chapman,45400.4754461111
+[Layers]
+layer0=Subcatchments
+layer1=Outlets
+layer2=Weirs
+layer3=Orifices
+layer4=Pumps
+layer5=Conduits
+layer6=Storages
+layer7=Dividers
+layer8=Outfalls
+layer9=Junctions
+[Graph]
+Plotting Position=Gringorten
+[Erosion]
+ErosionOn=False
+Use C TS=False
+Calculate LS=False
+Use TSS=False

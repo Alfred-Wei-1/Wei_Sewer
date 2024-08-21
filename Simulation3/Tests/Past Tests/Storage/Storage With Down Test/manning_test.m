@@ -1,0 +1,74 @@
+clear;
+clc;
+
+% load('scs10_dw.mat'); 
+% load('scs10_sf.mat'); 
+load('hurricane_dw.mat');
+% load('hurricane_sf.mat');
+N = length(J1inflow);
+time_step = 5;
+time = 0:time_step:N*time_step-time_step;
+
+%Conduit in PCSWMM Test
+
+%hurricane data
+Qmax = 2000;
+Qmin = 100;
+X = 6000;
+m = 1.5;
+B = 8;
+Sb = 0.0008;
+n = 0.02;
+YX = 27;
+Q0 = 500;
+Q = [Qmax,Qmin,Q0];
+
+canal = link('trapezoid',{X,n,Sb,Q,YX,[B,m]});
+
+% Second Link
+Qmax = 600;
+Qmin = 10;
+X = 6000;
+m = 1.5;
+B = 8;
+Sb = 0.0008;
+n = 0.02;
+YX = 0;
+Q0 = 300;
+Q = [Qmax,Qmin,Q0];
+canal2 = link('trapezoid',{X,n,Sb,Q,YX,[B,m]});
+
+
+%Extract the parameters
+
+Ad = canal.Ad;
+taud = canal.taud;
+p21_inf = canal.p21_inf;
+p22_inf = canal.p22_inf;
+
+Au = canal2.Au;
+tauu = canal2.tauu;
+p11_inf = canal2.p11_inf;
+p12_inf = canal2.p12_inf;
+
+%Define transfer functions
+s = tf('s');
+p21 = (1/(Ad*s) + p21_inf)*exp(-taud*s);
+p22 = -1/(Ad*s) - p22_inf;
+
+p11 = (1/(Au*s)) + p11_inf;
+p12 = -(1/(Au*s) + p12_inf)*exp(-tauu*s);
+
+yd = [p21 p22];
+yd.u = {'qu','qd'};
+yd.y = 'yd';
+
+yd_ds = c2d(yd,time_step);
+yd_ds = ss(yd_ds);
+
+yu = [p11 p12];
+yu_ds = c2d(yu,time_step);
+yu_ds = ss(yu_ds);
+
+%Simulate the discretized system
+qu = J1inflow;
